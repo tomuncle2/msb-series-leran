@@ -1,6 +1,4 @@
-package com.caidi.juc.c000;
-
-import com.caidi.juc.c001.T;
+package com.caidi.juc.c_000;
 
 import java.util.concurrent.TimeUnit;
 
