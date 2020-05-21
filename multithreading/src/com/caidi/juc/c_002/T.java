@@ -1,9 +1,9 @@
 package com.caidi.juc.c_002;
 
 /**
- * @author: 蔡迪
- * @date: 21:48 2020/5/20
- * @description:  锁this
+ * synchronized关键字
+ * 对某个对象加锁  用ths
+ * @author mashibing
  */
 public class T {
 

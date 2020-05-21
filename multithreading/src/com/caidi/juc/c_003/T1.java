@@ -1,9 +1,9 @@
 package com.caidi.juc.c_003;
 
 /**
- * @author: 蔡迪
- * @date: 21:51 2020/5/20
- * @description:
+ * synchronized关键字
+ * 对某个对象加锁  加锁方法和非加锁方法可以同时存在，非加锁方法可以随意访问
+ * @author mashibing
  */
 public class T1 {
 
