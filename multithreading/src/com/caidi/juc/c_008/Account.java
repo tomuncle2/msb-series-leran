@@ -5,52 +5,65 @@
  * 这样行不行？
  *
  * 容易产生脏读问题（dirtyRead）
+ * 加不加锁看实际业务允不允许脏读
  */
 
 package com.caidi.juc.c_008;
 
 import java.util.concurrent.TimeUnit;
 
-public class Account {
-	String name;
-	double balance;
-	
-	public synchronized void set(String name, double balance) {
-		this.name = name;
 
+public class Account {
+	private String name = "张三";
+	private int money = 1000;
+
+	/**
+	 * 存钱
+	 * @date 15:45 2020/5/22
+	 * @param money
+	 * @return void
+	 */
+	public synchronized void setMoney(Integer money) {
 		try {
-			Thread.sleep(2000);
+			TimeUnit.SECONDS.sleep(3);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+		this.money = money;
+		System.out.println(" 存取 " + this.getName() + " : " + money);
+	}
 
-		
-		this.balance = balance;
-	}
-	
-	public /*synchronized*/ double getBalance(String name) {
-		return this.balance;
-	}
-	
-	
-	public static void main(String[] args) {
-		Account a = new Account();
-		new Thread(()->a.set("zhangsan", 100.0)).start();
-		
+	/**
+	 * 查看余额
+	 * @date 15:46 2020/5/22
+	 * @param
+	 * @return int
+	 */
+	public /*synchronized*/ void readMoney() {
 		try {
 			TimeUnit.SECONDS.sleep(1);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		
-		System.out.println(a.getBalance("zhangsan"));
-		
-		try {
-			TimeUnit.SECONDS.sleep(2);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		
-		System.out.println(a.getBalance("zhangsan"));
+		System.out.println(" 查看余额 " + this.getName() + " : " + money);
 	}
+
+	public String getName() {
+		return name;
+	}
+
+	public int getMoney() {
+		return money;
+	}
+
+	public static void main(String[] args) {
+		Account account = new Account();
+		new Thread(()->{
+			account.setMoney(account.getMoney() + 500);
+		}).start();
+		new Thread(()->{
+			account.readMoney();
+		}).start();
+	}
+
 }

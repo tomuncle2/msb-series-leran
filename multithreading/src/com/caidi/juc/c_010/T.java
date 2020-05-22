@@ -6,30 +6,35 @@
  */
 package com.caidi.juc.c_010;
 
-import java.util.concurrent.TimeUnit;
 
 public class T {
-	synchronized void m() {
-		System.out.println("m start");
-		try {
-			TimeUnit.SECONDS.sleep(1);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		System.out.println("m end");
-	}
-	
+
 	public static void main(String[] args) {
-		new TT().m();
+		TT tt = new TT();
+		new Thread(()->{
+			tt.set(5);
+		}).start();
 	}
-	
 }
 
-class TT extends T {
+class T1 {
+	private int i = 0;
+
+	public void set(int number) {
+		this.i = i + number;
+		System.out.println("father-T1: " + i);
+	}
+
+}
+
+class TT extends T1 {
+
+	private int i = 0;
+
 	@Override
-	synchronized void m() {
-		System.out.println("child m start");
-		super.m();
-		System.out.println("child m end");
+	public void set(int number) {
+		this.i = i + number;
+		super.set(10);
+		System.out.println("son-TT: " + i);
 	}
 }

@@ -8,50 +8,64 @@
  */
 package com.caidi.juc.c_011;
 
-import java.util.concurrent.TimeUnit;
+
 
 public class T {
-	int count = 0;
-	synchronized void m() {
-		System.out.println(Thread.currentThread().getName() + " start");
-		while(true) {
-			count ++;
-			System.out.println(Thread.currentThread().getName() + " count = " + count);
+
+	private int count = 0;
+
+	public void m1() throws  InterruptedException {
+		synchronized(this) {
+			System.out.println(Thread.currentThread().getName() + " : start");
+			while (true) {
+				count++;
+				System.out.println(Thread.currentThread().getName() + " : count = " + count);
+				Thread.sleep(1000);
+				if(count == 5) {
+					throw new InterruptedException("程序异常！！");
+				}
+			}
+
+		}
+	}
+
+
+	public static void main(String[] args) {
+		T t = new T();
+		new Thread(()-> {
 			try {
-				TimeUnit.SECONDS.sleep(1);
-				
+				t.m1();
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			
-			if(count == 5) {
-				int i = 1/0; //此处抛出异常，锁将被释放，要想不被释放，可以在这里进行catch，然后让循环继续
-				System.out.println(i);
-			}
-		}
-	}
-	
-	public static void main(String[] args) {
-		T t = new T();
-		Runnable r = new Runnable() {
+		}, "t1").start();
 
-			@Override
-			public void run() {
-				t.m();
+		new Thread(()-> {
+			try {
+				t.m1();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
 			}
-			
-		};
-		new Thread(r, "t1").start();
-		
-		try {
-			TimeUnit.SECONDS.sleep(3);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		
-		new Thread(r, "t2").start();
+		}, "t2").start();
 	}
-	
+
+	/**
+	 * * t1 start
+	 * * t1 count = 1
+	 * * t1 count = 2
+	 * * t1 count = 3
+	 * * t1 count = 4
+	 * * t1 count = 5
+	 * * 程序异常
+	 * * t2 start
+	 * * t2 count = 6
+	 * * t3 count = 7
+	 * * t4 count = 8
+	 * * t5 count = 9
+	 * * t6 count = 10
+	 * * .....
+	 */
+
 }
 
 

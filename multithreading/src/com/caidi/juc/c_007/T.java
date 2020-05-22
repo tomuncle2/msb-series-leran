@@ -1,52 +1,58 @@
 /**
  * 同步和非同步方法是否可以同时调用？
+ * 可以
  * @author mashibing
  */
 
 package com.caidi.juc.c_007;
 
+
+import java.util.concurrent.TimeUnit;
+
 public class T {
 
-	public synchronized void m1() { 
-		System.out.println(Thread.currentThread().getName() + " m1 start...");
+	public synchronized void m1() {
+		System.out.println("m1 start");
 		try {
-			Thread.sleep(10000);
+			TimeUnit.SECONDS.sleep(2);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		System.out.println(Thread.currentThread().getName() + " m1 end");
+		System.out.println("m1 end");
 	}
-	
-	public void m2() {
-		try {
-			Thread.sleep(5000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		System.out.println(Thread.currentThread().getName() + " m2 ");
-	}
-	
-	public static void main(String[] args) {
-		T t = new T();
-		
-		/*new Thread(()->t.m1(), "t1").start();
-		new Thread(()->t.m2(), "t2").start();*/
-		
-		new Thread(t::m1, "t1").start();
-		new Thread(t::m2, "t2").start();
-		
-		/*
-		//1.8֮ǰ��д��
-		new Thread(new Runnable() {
 
+	public /*synchronized*/ void m2() {
+		System.out.println("m2 start");
+		try {
+			TimeUnit.SECONDS.sleep(1);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		System.out.println("m2 end");
+	}
+
+	public static void main(String[] args) {
+		T t1 = new T();
+//		Thread thread01 = new Thread(()->{
+//			t1.m1();
+//		},"t1");
+//		Thread thread02 = new Thread(()->{
+//			t1.m2();
+//		},"t2");
+//		thread01.start();
+//		thread02.start();
+
+		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				t.m1();
+				t1.m1();
 			}
-			
-		});
-		*/
-		
+		}).start();
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				t1.m2();
+			}
+		}).start();
 	}
-	
 }
