@@ -2,7 +2,7 @@ package com.caidi.juc.c_002;
 
 /**
  * synchronized关键字
- * 对某个对象加锁  用ths
+ * 对某个对象加锁  修饰代码块,用this
  * @author mashibing
  */
 public class T {
