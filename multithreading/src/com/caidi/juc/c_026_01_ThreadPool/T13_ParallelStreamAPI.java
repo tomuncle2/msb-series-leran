@@ -1,5 +1,7 @@
 package com.caidi.juc.c_026_01_ThreadPool;
-
+/**
+ * 并发/单任务执行的效率区别
+ */
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;

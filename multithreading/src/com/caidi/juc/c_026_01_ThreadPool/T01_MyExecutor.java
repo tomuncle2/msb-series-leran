@@ -12,6 +12,8 @@ public class T01_MyExecutor implements Executor{
 		new My_ThreadPool_1().execute(()->{
 			System.out.println("dsdsds");
 		});
+
+		new My_ThreadPool_1().execute(new Thread());
 	}
 
 	@Override
@@ -31,5 +33,6 @@ class My_ThreadPool_1 implements Executor {
 		new Thread(command,"xxx").start();
 		System.out.println("hello thread pool");
 	}
+
 }
 
