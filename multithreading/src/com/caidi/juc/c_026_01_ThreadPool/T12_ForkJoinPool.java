@@ -11,15 +11,15 @@ public class T12_ForkJoinPool {
 	static int[] nums = new int[1000000];
 	static final int MAX_NUM = 50000;
 	static Random r = new Random();
-	
+
 	static {
 		for(int i=0; i<nums.length; i++) {
 			nums[i] = r.nextInt(100);
 		}
-		
+
 		System.out.println("---" + Arrays.stream(nums).sum()); //stream api
 	}
-	
+
 
 	static class AddTask extends RecursiveAction {
 
@@ -52,12 +52,12 @@ public class T12_ForkJoinPool {
 
 	}
 
-	
+
 	static class AddTaskRet extends RecursiveTask<Long> {
-		
+
 		private static final long serialVersionUID = 1L;
 		int start, end;
-		
+
 		AddTaskRet(int s, int e) {
 			start = s;
 			end = e;
@@ -65,25 +65,25 @@ public class T12_ForkJoinPool {
 
 		@Override
 		protected Long compute() {
-			
+
 			if(end-start <= MAX_NUM) {
 				long sum = 0L;
 				for(int i=start; i<end; i++) sum += nums[i];
 				return sum;
-			} 
-			
+			}
+
 			int middle = start + (end-start)/2;
-			
+
 			AddTaskRet subTask1 = new AddTaskRet(start, middle);
 			AddTaskRet subTask2 = new AddTaskRet(middle, end);
 			subTask1.fork();
 			subTask2.fork();
-			
+
 			return subTask1.join() + subTask2.join();
 		}
-		
+
 	}
-	
+
 	public static void main(String[] args) throws IOException {
 		/*ForkJoinPool fjp = new ForkJoinPool();
 		AddTask task = new AddTask(0, nums.length);
@@ -96,8 +96,8 @@ public class T12_ForkJoinPool {
 		fjp.execute(task);
 		long result = task.join();
 		System.out.println(result);
-		
+
 		//System.in.read();
-		
+
 	}
 }

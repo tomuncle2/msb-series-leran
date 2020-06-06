@@ -1,5 +1,5 @@
 /**
- * �̳߳صĸ���
+ * �̳߳صĸ���
  */
 package com.caidi.juc.c_026_01_ThreadPool;
 
@@ -9,6 +9,7 @@ import java.util.concurrent.TimeUnit;
 
 public class T05_ThreadPool {
 	public static void main(String[] args) throws InterruptedException {
+		Th
 		ExecutorService service = Executors.newFixedThreadPool(5); //execute submit
 		for (int i = 0; i < 6; i++) {
 			service.execute(() -> {
@@ -21,12 +22,12 @@ public class T05_ThreadPool {
 			});
 		}
 		System.out.println(service);
-		
+
 		service.shutdown();
 		System.out.println(service.isTerminated());
 		System.out.println(service.isShutdown());
 		System.out.println(service);
-		
+
 		TimeUnit.SECONDS.sleep(5);
 		System.out.println(service.isTerminated());
 		System.out.println(service.isShutdown());
