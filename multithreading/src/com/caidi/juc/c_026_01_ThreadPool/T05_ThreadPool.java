@@ -9,7 +9,6 @@ import java.util.concurrent.TimeUnit;
 
 public class T05_ThreadPool {
 	public static void main(String[] args) throws InterruptedException {
-		Th
 		ExecutorService service = Executors.newFixedThreadPool(5); //execute submit
 		for (int i = 0; i < 6; i++) {
 			service.execute(() -> {

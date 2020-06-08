@@ -17,10 +17,11 @@
  */
 package com.caidi.juc.c_012_Volatile;
 
+
 import java.util.concurrent.TimeUnit;
 
 public class T01_HelloVolatile {
-	/*volatile*/ boolean running = true; //对比一下有无volatile的情况下，整个程序运行结果的区别
+	volatile boolean running = true; //对比一下有无volatile的情况下，整个程序运行结果的区别
 	void m() {
 		System.out.println("m start");
 		while(running) {
@@ -40,8 +41,54 @@ public class T01_HelloVolatile {
 		}
 		
 		t.running = false;
+		System.out.println(t.running);
 	}
 	
 }
+
+/**
+ * 主线程修改对象成员变量（相当于线程间公共变量），子线程无法及时感知到
+ *
+ */
+class  Test{
+	// 线程间共享变量
+	 volatile boolean b = true;
+
+	public void m1() {
+		System.out.println("start--");
+		while (b) {
+
+		}
+		System.out.println("end--");
+	}
+
+	public static void main(String[] args) {
+		//
+		Test test = new Test();
+
+		new Thread(()->{
+			test.m1();
+		}).start();
+
+		try {
+			TimeUnit.SECONDS.sleep(1);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		test.b = false;
+		System.out.println(test.b);
+	}
+}
+
+class Task1 {
+	public void m1(boolean b) {
+		System.out.println("start--");
+		while (b) {
+
+		}
+		System.out.println("end--");
+	}
+}
+
 
 
