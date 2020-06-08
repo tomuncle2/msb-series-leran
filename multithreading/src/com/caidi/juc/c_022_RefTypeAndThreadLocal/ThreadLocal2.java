@@ -10,7 +10,6 @@
  */
 package com.caidi.juc.c_022_RefTypeAndThreadLocal;
 
-import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 public class ThreadLocal2 {
