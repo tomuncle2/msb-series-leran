@@ -20,7 +20,7 @@ public class T {
 class T1 {
 	private int i = 0;
 
-	public void set(int number) {
+	public synchronized void set(int number) {
 		this.i = i + number;
 		System.out.println("father-T1: " + i);
 	}
@@ -32,7 +32,7 @@ class TT extends T1 {
 	private int i = 0;
 
 	@Override
-	public void set(int number) {
+	public synchronized void set(int number) {
 		this.i = i + number;
 		super.set(10);
 		System.out.println("son-TT: " + i);

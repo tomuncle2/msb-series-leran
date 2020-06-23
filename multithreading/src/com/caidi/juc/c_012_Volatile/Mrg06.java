@@ -1,5 +1,7 @@
 package com.caidi.juc.c_012_Volatile;
 
+import java.util.concurrent.locks.ReentrantLock;
+
 /**
  * @author: 蔡迪
  * @date: 10:05 2020/6/8
@@ -8,7 +10,6 @@ package com.caidi.juc.c_012_Volatile;
  * 对象创建底层指令步骤：1.申请内存空间，变量赋予默认值 2.给变量赋值。3.将对象堆空间地址赋给栈引用
  * 实际情况，在超高并发情况下，才有可能出现下面的情况。一般比较难观察出问题。
  */
-
 public class Mrg06 {
 
     private int a = 5;
@@ -42,5 +43,9 @@ public class Mrg06 {
             System.out.println(mrg06.hashCode());
             //System.out.println(mrg06.getA());
         }
+
+        ReentrantLock lock = new ReentrantLock();
+        lock.lock();
+        lock.unlock();
     }
 }
