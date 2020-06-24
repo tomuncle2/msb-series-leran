@@ -15,7 +15,7 @@ public class T06_TestCountDownLatch {
         for(int i=0; i<threads.length; i++) {
             threads[i] = new Thread(()->{
                 int result = 0;
-                for(int j=0; j<10000; j++) result += j;
+                for(int j=0; j<10000; j++) result += j ;
                 latch.countDown();
             });
         }

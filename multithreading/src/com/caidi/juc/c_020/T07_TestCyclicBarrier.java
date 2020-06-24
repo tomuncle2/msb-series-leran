@@ -7,12 +7,12 @@ public class T07_TestCyclicBarrier {
     public static void main(String[] args) {
         //CyclicBarrier barrier = new CyclicBarrier(20);
 
-        CyclicBarrier barrier = new CyclicBarrier(20, () -> System.out.println("ÂúÈË"));
+        CyclicBarrier barrier = new CyclicBarrier(20, () -> System.out.println("ï¿½ï¿½ï¿½ï¿½"));
 
         /*CyclicBarrier barrier = new CyclicBarrier(20, new Runnable() {
             @Override
             public void run() {
-                System.out.println("ÂúÈË£¬·¢³µ");
+                System.out.println("ï¿½ï¿½ï¿½Ë£ï¿½ï¿½ï¿½ï¿½ï¿½");
             }
         });*/
 
@@ -21,14 +21,13 @@ public class T07_TestCyclicBarrier {
                 new Thread(()->{
                     try {
                         barrier.await();
-
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     } catch (BrokenBarrierException e) {
                         e.printStackTrace();
                     }
                 }).start();
-            
+
         }
     }
 }
