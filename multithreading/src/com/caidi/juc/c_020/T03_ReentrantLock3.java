@@ -26,6 +26,7 @@ public class T03_ReentrantLock3 {
 				TimeUnit.SECONDS.sleep(1);
 
 				System.out.println(i);
+				System.out.println(Thread.currentThread().getName() + " status: " + Thread.currentThread().getState());
 			}
 		} catch (InterruptedException e) {
 			e.printStackTrace();
@@ -49,6 +50,7 @@ public class T03_ReentrantLock3 {
 		boolean locked = false;
 		
 		try {
+			System.out.println(Thread.currentThread().getName() + " status: " + Thread.currentThread().getState());
 			locked = lock.tryLock(5, TimeUnit.SECONDS);
 			System.out.println("m2 ..." + locked);
 		} catch (InterruptedException e) {

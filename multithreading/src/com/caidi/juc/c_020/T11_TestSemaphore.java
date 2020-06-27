@@ -1,5 +1,7 @@
 package com.caidi.juc.c_020;
-
+/**
+ * 信号量  允许一个线程同时执行
+ */
 import java.util.concurrent.Semaphore;
 
 public class T11_TestSemaphore {
@@ -11,6 +13,7 @@ public class T11_TestSemaphore {
 
         new Thread(()->{
             try {
+                // 获取到
                 s.acquire();
 
                 System.out.println("T1 running...");
@@ -20,6 +23,7 @@ public class T11_TestSemaphore {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } finally {
+                // 释放
                 s.release();
             }
         }).start();

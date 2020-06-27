@@ -1,5 +1,7 @@
 package com.caidi.juc.c_020;
-
+/**
+ * CyclicBarrierÉý¼¶°æ
+ */
 import java.util.Random;
 import java.util.concurrent.Phaser;
 import java.util.concurrent.TimeUnit;
