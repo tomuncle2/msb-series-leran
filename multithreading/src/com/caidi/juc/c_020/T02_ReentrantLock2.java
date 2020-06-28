@@ -1,14 +1,16 @@
 /**
- * reentrantlockÓÃÓÚÌæ´úsynchronized
- * ÓÉÓÚm1Ëø¶¨this,Ö»ÓĞm1Ö´ĞĞÍê±ÏµÄÊ±ºò,m2²ÅÄÜÖ´ĞĞ
- * ÕâÀïÊÇ¸´Ï°synchronized×îÔ­Ê¼µÄÓïÒå
- * 
- * Ê¹ÓÃreentrantlock¿ÉÒÔÍê³ÉÍ¬ÑùµÄ¹¦ÄÜ
- * ĞèÒª×¢ÒâµÄÊÇ£¬±ØĞëÒª±ØĞëÒª±ØĞëÒªÊÖ¶¯ÊÍ·ÅËø£¨ÖØÒªµÄÊÂÇéËµÈı±é£©
- * Ê¹ÓÃsynËø¶¨µÄ»°Èç¹ûÓöµ½Òì³££¬jvm»á×Ô¶¯ÊÍ·ÅËø£¬µ«ÊÇlock±ØĞëÊÖ¶¯ÊÍ·ÅËø£¬Òò´Ë¾­³£ÔÚfinallyÖĞ½øĞĞËøµÄÊÍ·Å
+ * reentrantlockï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½synchronized
+ * ï¿½ï¿½ï¿½ï¿½m1ï¿½ï¿½ï¿½ï¿½this,Ö»ï¿½ï¿½m1Ö´ï¿½ï¿½ï¿½ï¿½Ïµï¿½Ê±ï¿½ï¿½,m2ï¿½ï¿½ï¿½ï¿½Ö´ï¿½ï¿½
+ * ï¿½ï¿½ï¿½ï¿½ï¿½Ç¸ï¿½Ï°synchronizedï¿½ï¿½Ô­Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+ *
+ * Ê¹ï¿½ï¿½reentrantlockï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¬ï¿½ï¿½ï¿½Ä¹ï¿½ï¿½ï¿½
+ * ï¿½ï¿½Òª×¢ï¿½ï¿½ï¿½ï¿½Ç£ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½Òªï¿½Ö¶ï¿½ï¿½Í·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ëµï¿½ï¿½ï¿½é£©
+ * Ê¹ï¿½ï¿½synï¿½ï¿½ï¿½ï¿½ï¿½Ä»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ì³£ï¿½ï¿½jvmï¿½ï¿½ï¿½Ô¶ï¿½ï¿½Í·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½lockï¿½ï¿½ï¿½ï¿½ï¿½Ö¶ï¿½ï¿½Í·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë¾ï¿½ï¿½ï¿½ï¿½ï¿½finallyï¿½Ğ½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í·ï¿½
  * @author mashibing
  */
 package com.caidi.juc.c_020;
+
+import com.caidi.juc.c_021_02_AQS.MLock;
 
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
@@ -53,3 +55,166 @@ public class T02_ReentrantLock2 {
 		new Thread(rl::m2).start();
 	}
 }
+
+class MyT02_ReentrantLock2Test {
+	// å¯é‡å…¥é”
+	private Lock lock = new ReentrantLock();
+
+	public void m1 () {
+		try {
+			lock.lock();
+			for (int i = 0; i < 10; i++) {
+				System.out.println(Thread.currentThread().getName() + " : i = " + i + " m1 run....");
+				try {
+					TimeUnit.SECONDS.sleep(1);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				// synchronizedæ˜¯å¯é‡å…¥é”
+				if (i == 2) {
+					m2();
+				}
+			}
+		} finally {
+			lock.unlock();
+		}
+	}
+
+	/**
+	 * ReentrantLockä¸ºäº’æ–¥é”ï¼Œå½“ä¸åŒçº¿ç¨‹éƒ½å»è·å–é”çš„æ—¶å€™è¡¨ç°å‡ºäº’æ–¥æ€§ï¼Œå¦‚æœåŒä¸€çº¿ç¨‹ï¼Œåˆ™æ˜¯å¯é‡å…¥çš„ã€‚
+	 * é”æ˜¯ç›¸å¯¹äºåŒä¸€ä¸ªå¯¹è±¡çš„ï¼Œè¿™é‡Œä¸ºLockå¯¹è±¡
+	 * @date 10:27 2020/6/28
+	 * @param null
+	 * @return
+	 */
+	public void m2() {
+	 	try {
+			// ä¸synchronized(this)ä½œç”¨ç±»ä¼¼
+			lock.lock();
+			for (int i = 0; i < 10; i++) {
+				System.out.println(Thread.currentThread().getName() + " : i = " + i + " m2 run....");
+				try {
+					TimeUnit.SECONDS.sleep(1);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+		} finally {
+	 		lock.unlock();
+		}
+	}
+
+
+
+	//
+	public static void main(String[] args) {
+		MyT02_ReentrantLock2 myT02_reentrantLock2 = new MyT02_ReentrantLock2();
+		// å¯é‡å…¥
+//		new Thread(()-> {
+//			myT02_reentrantLock2.m1();
+//		}).start();
+
+		// äº’æ–¥æ€§
+		Lock lock = new ReentrantLock();
+		new Thread(()-> {
+			myT02_reentrantLock2.m2(lock);
+		}).start();
+
+		// äº’æ–¥æ€§
+		new Thread(()-> {
+			myT02_reentrantLock2.m2(lock);
+		}).start();
+	}
+}
+
+
+class MyT02_ReentrantLock2 {
+	// å¯é‡å…¥é”   é”åœ¨Lockå¯¹è±¡ä¸Š ä¸æ˜¯åœ¨MyT02_ReentrantLock2å¯¹è±¡ä¸Š
+//	private Lock lock = new ReentrantLock();
+//
+//	public void m1 () {
+//		try {
+//			lock.lock();
+//			for (int i = 0; i < 10; i++) {
+//				System.out.println(Thread.currentThread().getName() + " : i = " + i + " m1 run....");
+//				try {
+//					TimeUnit.SECONDS.sleep(1);
+//				} catch (InterruptedException e) {
+//					e.printStackTrace();
+//				}
+//				// synchronizedæ˜¯å¯é‡å…¥é”
+//				if (i == 2) {
+//					m2();
+//				}
+//			}
+//		} finally {
+//			lock.unlock();
+//		}
+//	}
+//
+//	/**
+//	 * synchronizedä¸ºäº’æ–¥é”,å…¶ä¿®é¥°äº†ä¸¤ä¸ªæ–¹æ³•ï¼Œå½“ä¸åŒçº¿ç¨‹éƒ½å»è·å–é”çš„æ—¶å€™è¡¨ç°å‡ºäº’æ–¥æ€§ï¼Œå¦‚æœåŒä¸€çº¿ç¨‹ï¼Œåˆ™æ˜¯å¯é‡å…¥çš„ã€‚
+//	 * é”æ˜¯æƒ³å¯¹äºåŒä¸€ä¸ªå¯¹è±¡çš„ï¼Œæˆå‘˜å˜é‡Lockå’Œå¯¹è±¡æ˜¯ä¸€ä¸€å¯¹åº”çš„
+//	 * @date 10:27 2020/6/28
+//	 * @param null
+//	 * @return
+//	 */
+//	public void m2() {
+//	 	try {
+//			// ä¸synchronized(this)ä½œç”¨ç±»ä¼¼
+//			lock.lock();
+//			for (int i = 0; i < 10; i++) {
+//				System.out.println(Thread.currentThread().getName() + " : i = " + i + " m2 run....");
+//				try {
+//					TimeUnit.SECONDS.sleep(1);
+//				} catch (InterruptedException e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		} finally {
+//	 		lock.unlock();
+//		}
+//	}
+
+
+	public void m2(Lock lock) {
+	 //lockå¿…é¡»ä¸ºç±»æˆå‘˜å˜é‡
+//		Lock lock = new ReentrantLock();
+		try {
+			// ä¸synchronized(this)ä½œç”¨ç±»ä¼¼
+			lock.lock();
+			for (int i = 0; i < 10; i++) {
+				System.out.println(Thread.currentThread().getName() + " : i = " + i + " m2 run....");
+				try {
+					TimeUnit.SECONDS.sleep(1);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+		} finally {
+			lock.unlock();
+		}
+	}
+
+	//
+	public static void main(String[] args) {
+		MyT02_ReentrantLock2 myT02_reentrantLock2 = new MyT02_ReentrantLock2();
+		MyT02_ReentrantLock2 myT02_reentrantLock3 = new MyT02_ReentrantLock2();
+		// å¯é‡å…¥
+//		new Thread(()-> {
+//			myT02_reentrantLock2.m1();
+//		}).start();
+
+		// äº’æ–¥æ€§  é”åœ¨Lockå¯¹è±¡ä¸Š
+		Lock lock = new ReentrantLock();
+		new Thread(()-> {
+			myT02_reentrantLock2.m2(lock);
+		}).start();
+
+		// äº’æ–¥æ€§
+		new Thread(()-> {
+			myT02_reentrantLock3.m2(lock);
+		}).start();
+	}
+}
+

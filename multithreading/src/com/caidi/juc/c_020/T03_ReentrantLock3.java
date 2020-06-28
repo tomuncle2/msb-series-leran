@@ -1,13 +1,13 @@
 /**
- * reentrantlockÓÃÓÚÌæ´úsynchronized
- * ÓÉÓÚm1Ëø¶¨this,Ö»ÓĞm1Ö´ĞĞÍê±ÏµÄÊ±ºò,m2²ÅÄÜÖ´ĞĞ
- * ÕâÀïÊÇ¸´Ï°synchronized×îÔ­Ê¼µÄÓïÒå
- * 
- * Ê¹ÓÃreentrantlock¿ÉÒÔÍê³ÉÍ¬ÑùµÄ¹¦ÄÜ
- * ĞèÒª×¢ÒâµÄÊÇ£¬±ØĞëÒª±ØĞëÒª±ØĞëÒªÊÖ¶¯ÊÍ·ÅËø£¨ÖØÒªµÄÊÂÇéËµÈı±é£©
- * Ê¹ÓÃsynËø¶¨µÄ»°Èç¹ûÓöµ½Òì³££¬jvm»á×Ô¶¯ÊÍ·ÅËø£¬µ«ÊÇlock±ØĞëÊÖ¶¯ÊÍ·ÅËø£¬Òò´Ë¾­³£ÔÚfinallyÖĞ½øĞĞËøµÄÊÍ·Å
- * 
- * Ê¹ÓÃreentrantlock¿ÉÒÔ½øĞĞ¡°³¢ÊÔËø¶¨¡±tryLock£¬ÕâÑùÎŞ·¨Ëø¶¨£¬»òÕßÔÚÖ¸¶¨Ê±¼äÄÚÎŞ·¨Ëø¶¨£¬Ïß³Ì¿ÉÒÔ¾ö¶¨ÊÇ·ñ¼ÌĞøµÈ´ı
+ * reentrantlockï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½synchronized
+ * ï¿½ï¿½ï¿½ï¿½m1ï¿½ï¿½ï¿½ï¿½this,Ö»ï¿½ï¿½m1Ö´ï¿½ï¿½ï¿½ï¿½Ïµï¿½Ê±ï¿½ï¿½,m2ï¿½ï¿½ï¿½ï¿½Ö´ï¿½ï¿½
+ * ï¿½ï¿½ï¿½ï¿½ï¿½Ç¸ï¿½Ï°synchronizedï¿½ï¿½Ô­Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+ *
+ * Ê¹ï¿½ï¿½reentrantlockï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¬ï¿½ï¿½ï¿½Ä¹ï¿½ï¿½ï¿½
+ * ï¿½ï¿½Òª×¢ï¿½ï¿½ï¿½ï¿½Ç£ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½Òªï¿½Ö¶ï¿½ï¿½Í·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ëµï¿½ï¿½ï¿½é£©
+ * Ê¹ï¿½ï¿½synï¿½ï¿½ï¿½ï¿½ï¿½Ä»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ì³£ï¿½ï¿½jvmï¿½ï¿½ï¿½Ô¶ï¿½ï¿½Í·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½lockï¿½ï¿½ï¿½ï¿½ï¿½Ö¶ï¿½ï¿½Í·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë¾ï¿½ï¿½ï¿½ï¿½ï¿½finallyï¿½Ğ½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í·ï¿½
+ *
+ * Ê¹ï¿½ï¿½reentrantlockï¿½ï¿½ï¿½Ô½ï¿½ï¿½Ğ¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½tryLockï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ş·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½Ş·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ß³Ì¿ï¿½ï¿½Ô¾ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½ï¿½ï¿½È´ï¿½
  * @author mashibing
  */
 package com.caidi.juc.c_020;
@@ -36,9 +36,9 @@ public class T03_ReentrantLock3 {
 	}
 
 	/**
-	 * Ê¹ÓÃtryLock½øĞĞ³¢ÊÔËø¶¨£¬²»¹ÜËø¶¨Óë·ñ£¬·½·¨¶¼½«¼ÌĞøÖ´ĞĞ
-	 * ¿ÉÒÔ¸ù¾İtryLockµÄ·µ»ØÖµÀ´ÅĞ¶¨ÊÇ·ñËø¶¨
-	 * Ò²¿ÉÒÔÖ¸¶¨tryLockµÄÊ±¼ä£¬ÓÉÓÚtryLock(time)Å×³öÒì³££¬ËùÒÔÒª×¢ÒâunclockµÄ´¦Àí£¬±ØĞë·Åµ½finallyÖĞ
+	 * Ê¹ï¿½ï¿½tryLockï¿½ï¿½ï¿½Ğ³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ñ£¬·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö´ï¿½ï¿½
+	 * ï¿½ï¿½ï¿½Ô¸ï¿½ï¿½ï¿½tryLockï¿½Ä·ï¿½ï¿½ï¿½Öµï¿½ï¿½ï¿½Ğ¶ï¿½ï¿½Ç·ï¿½ï¿½ï¿½ï¿½ï¿½
+	 * Ò²ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½tryLockï¿½ï¿½Ê±ï¿½ä£¬ï¿½ï¿½ï¿½ï¿½tryLock(time)ï¿½×³ï¿½ï¿½ì³£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òª×¢ï¿½ï¿½unclockï¿½Ä´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½finallyï¿½ï¿½
 	 */
 	void m2() {
 		/*
@@ -46,9 +46,9 @@ public class T03_ReentrantLock3 {
 		System.out.println("m2 ..." + locked);
 		if(locked) lock.unlock();
 		*/
-		
+
 		boolean locked = false;
-		
+
 		try {
 			System.out.println(Thread.currentThread().getName() + " status: " + Thread.currentThread().getState());
 			locked = lock.tryLock(5, TimeUnit.SECONDS);
@@ -58,7 +58,7 @@ public class T03_ReentrantLock3 {
 		} finally {
 			if(locked) lock.unlock();
 		}
-		
+
 	}
 
 	public static void main(String[] args) {
@@ -71,4 +71,88 @@ public class T03_ReentrantLock3 {
 		}
 		new Thread(rl::m2).start();
 	}
+}
+
+/**
+ * tryLockçš„ä½¿ç”¨ã€‚
+ * @date 11:31 2020/6/28
+ * @param
+ * @return
+ */
+class MyT03_ReentrantLock3 {
+	// å¯é‡å…¥é”
+	private Lock lock = new ReentrantLock();
+
+	public void m1 () {
+		try {
+			lock.lock();
+			for (int i = 0; i < 10; i++) {
+				System.out.println(Thread.currentThread().getName() + " : i = " + i + " m1 run....");
+				try {
+					TimeUnit.SECONDS.sleep(1);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				// synchronizedæ˜¯å¯é‡å…¥é”
+				if (i == 2) {
+					m2();
+				}
+			}
+		} finally {
+			lock.unlock();
+		}
+	}
+
+	/**
+	 *  ReentrantLockä¸ºäº’æ–¥é”ï¼Œå½“ä¸åŒçº¿ç¨‹éƒ½å»è·å–é”çš„æ—¶å€™è¡¨ç°å‡ºäº’æ–¥æ€§ï¼Œå¦‚æœåŒä¸€çº¿ç¨‹ï¼Œåˆ™æ˜¯å¯é‡å…¥çš„ã€‚
+	 * 	 é”æ˜¯ç›¸å¯¹äºåŒä¸€ä¸ªå¯¹è±¡çš„ï¼Œè¿™é‡Œä¸ºLockå¯¹è±¡
+	 * @date 10:27 2020/6/28
+	 * @param null
+	 * @return
+	 */
+	public void m2() {
+
+		boolean b = false;
+		try {
+			// å°è¯•è·å–é”,å¹¶è¿”å›ç»“æœ
+			b = lock.tryLock(11,TimeUnit.SECONDS);
+			System.out.println(Thread.currentThread().getName() + " isLocked :" + b);
+			if (b) {
+				for (int i = 0; i < 10; i++) {
+					System.out.println(Thread.currentThread().getName() + " : i = " + i + " m2 run....");
+					try {
+						TimeUnit.SECONDS.sleep(1);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			} finally {
+				if (b) {
+					lock.unlock();
+				}
+			}
+	}
+
+	public static void main(String[] args) {
+		MyT03_ReentrantLock3 myT03_reentrantLock3 = new MyT03_ReentrantLock3();
+
+		// é‡å…¥æ€§
+		new Thread(()->{
+			myT03_reentrantLock3.m1();
+		}).start();
+
+		// äº’æ–¥æ€§
+//		new Thread(()->{
+//			myT03_reentrantLock3.m2();
+//		}).start();
+//
+//		new Thread(()->{
+//			myT03_reentrantLock3.m2();
+//		}).start();
+	}
+
 }

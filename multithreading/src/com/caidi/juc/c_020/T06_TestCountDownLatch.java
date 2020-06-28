@@ -58,3 +58,14 @@ public class T06_TestCountDownLatch {
         System.out.println("end join");
     }
 }
+
+/**
+ *倒数门栓
+ * @date 16:10 2020/6/28
+ * @param null
+ * @return
+ */
+class MyT06_TestCountDownLatch {
+
+
+}

@@ -1,17 +1,17 @@
 /**
- * reentrantlockÓÃÓÚÌæ´úsynchronized
- * ÓÉÓÚm1Ëø¶¨this,Ö»ÓÐm1Ö´ÐÐÍê±ÏµÄÊ±ºò,m2²ÅÄÜÖ´ÐÐ
- * ÕâÀïÊÇ¸´Ï°synchronized×îÔ­Ê¼µÄÓïÒå
- * 
- * Ê¹ÓÃreentrantlock¿ÉÒÔÍê³ÉÍ¬ÑùµÄ¹¦ÄÜ
- * ÐèÒª×¢ÒâµÄÊÇ£¬±ØÐëÒª±ØÐëÒª±ØÐëÒªÊÖ¶¯ÊÍ·ÅËø£¨ÖØÒªµÄÊÂÇéËµÈý±é£©
- * Ê¹ÓÃsynËø¶¨µÄ»°Èç¹ûÓöµ½Òì³££¬jvm»á×Ô¶¯ÊÍ·ÅËø£¬µ«ÊÇlock±ØÐëÊÖ¶¯ÊÍ·ÅËø£¬Òò´Ë¾­³£ÔÚfinallyÖÐ½øÐÐËøµÄÊÍ·Å
- * 
- * Ê¹ÓÃreentrantlock¿ÉÒÔ½øÐÐ¡°³¢ÊÔËø¶¨¡±tryLock£¬ÕâÑùÎÞ·¨Ëø¶¨£¬»òÕßÔÚÖ¸¶¨Ê±¼äÄÚÎÞ·¨Ëø¶¨£¬Ïß³Ì¿ÉÒÔ¾ö¶¨ÊÇ·ñ¼ÌÐøµÈ´ý
- * 
- * Ê¹ÓÃReentrantLock»¹¿ÉÒÔµ÷ÓÃlockInterruptibly·½·¨£¬¿ÉÒÔ¶ÔÏß³Ìinterrupt·½·¨×ö³öÏìÓ¦£¬
- * ÔÚÒ»¸öÏß³ÌµÈ´ýËøµÄ¹ý³ÌÖÐ£¬¿ÉÒÔ±»´ò¶Ï
- * 
+ * reentrantlockï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½synchronized
+ * ï¿½ï¿½ï¿½ï¿½m1ï¿½ï¿½ï¿½ï¿½this,Ö»ï¿½ï¿½m1Ö´ï¿½ï¿½ï¿½ï¿½Ïµï¿½Ê±ï¿½ï¿½,m2ï¿½ï¿½ï¿½ï¿½Ö´ï¿½ï¿½
+ * ï¿½ï¿½ï¿½ï¿½ï¿½Ç¸ï¿½Ï°synchronizedï¿½ï¿½Ô­Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+ *
+ * Ê¹ï¿½ï¿½reentrantlockï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¬ï¿½ï¿½ï¿½Ä¹ï¿½ï¿½ï¿½
+ * ï¿½ï¿½Òª×¢ï¿½ï¿½ï¿½ï¿½Ç£ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½Òªï¿½Ö¶ï¿½ï¿½Í·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ëµï¿½ï¿½ï¿½é£©
+ * Ê¹ï¿½ï¿½synï¿½ï¿½ï¿½ï¿½ï¿½Ä»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ì³£ï¿½ï¿½jvmï¿½ï¿½ï¿½Ô¶ï¿½ï¿½Í·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½lockï¿½ï¿½ï¿½ï¿½ï¿½Ö¶ï¿½ï¿½Í·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë¾ï¿½ï¿½ï¿½ï¿½ï¿½finallyï¿½Ð½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í·ï¿½
+ *
+ * Ê¹ï¿½ï¿½reentrantlockï¿½ï¿½ï¿½Ô½ï¿½ï¿½Ð¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½tryLockï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Þ·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½Þ·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ß³Ì¿ï¿½ï¿½Ô¾ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½ï¿½ï¿½È´ï¿½
+ *
+ * Ê¹ï¿½ï¿½ReentrantLockï¿½ï¿½ï¿½ï¿½ï¿½Ôµï¿½ï¿½ï¿½lockInterruptiblyï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô¶ï¿½ï¿½ß³ï¿½interruptï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó¦ï¿½ï¿½
+ * ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ß³ÌµÈ´ï¿½ï¿½ï¿½ï¿½Ä¹ï¿½ï¿½ï¿½ï¿½Ð£ï¿½ï¿½ï¿½ï¿½Ô±ï¿½ï¿½ï¿½ï¿½
+ *
  * @author mashibing
  */
 package com.caidi.juc.c_020;
@@ -21,11 +21,11 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class T04_ReentrantLock4 {
-		
+
 	public static void main(String[] args) {
 		Lock lock = new ReentrantLock();
-		
-		
+
+
 		Thread t1 = new Thread(()->{
 			try {
 				lock.lock();
@@ -39,11 +39,11 @@ public class T04_ReentrantLock4 {
 			}
 		});
 		t1.start();
-		
+
 		Thread t2 = new Thread(()->{
 			try {
 				//lock.lock();
-				lock.lockInterruptibly(); //¿ÉÒÔ¶Ôinterrupt()·½·¨×ö³öÏìÓ¦
+				lock.lockInterruptibly(); //ï¿½ï¿½ï¿½Ô¶ï¿½interrupt()ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó¦
 				System.out.println("t2 start");
 				TimeUnit.SECONDS.sleep(5);
 				System.out.println("t2 end");
@@ -54,13 +54,53 @@ public class T04_ReentrantLock4 {
 			}
 		});
 		t2.start();
-		
+
 		try {
 			TimeUnit.SECONDS.sleep(1);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		t2.interrupt(); //´ò¶ÏÏß³Ì2µÄµÈ´ý
-		
+		t2.interrupt(); //ï¿½ï¿½ï¿½ï¿½ß³ï¿½2ï¿½ÄµÈ´ï¿½
+
+	}
+}
+
+class MyT04_ReentrantLock4 {
+
+	//
+	public static void main(String[] args) {
+		//
+		Lock lock = new ReentrantLock();
+		Thread t1 = new Thread(()->{
+			try {
+				lock.lock();
+				System.out.println("t1 start");
+				TimeUnit.SECONDS.sleep(Integer.MAX_VALUE);
+				System.out.println("t1 end");
+			} catch (InterruptedException e) {
+				System.out.println("interrupted!");
+			} finally {
+				lock.unlock();
+			}
+		});
+		t1.start();
+		//
+
+		Thread t2 = new Thread(()->{
+			try {
+				lock.lockInterruptibly();
+				System.out.println("t2 start");
+				TimeUnit.SECONDS.sleep(1);
+				System.out.println("t2 end");
+			} catch (InterruptedException e) {
+				System.out.println("interrupted!");
+			} finally {
+				lock.unlock();
+			}
+		});
+		t2.start();
+
+		// miançº¿ç¨‹æ‰“æ–­t2 çš„ç­‰å¾…ï¼Œ
+		t2.interrupt();
 	}
 }

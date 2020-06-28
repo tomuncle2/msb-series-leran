@@ -35,7 +35,7 @@ public class T03________SyncVsLongAdder {
             threads[i] =
                 new Thread(new Runnable() {
                     @Override
-                    public void run() {
+                          public void run() {
                         for(int k=0; k<100000; k++) {
                             synchronized (lock) {
                                 count2++;
