@@ -19,7 +19,6 @@ public class T01_ReentrantLock1 {
 			System.out.println(i);
 			if(i == 2) m2();
 		}
-
 	}
 
 	synchronized void m2() {
