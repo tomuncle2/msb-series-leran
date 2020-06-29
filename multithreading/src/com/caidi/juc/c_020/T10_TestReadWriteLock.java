@@ -58,3 +58,16 @@ public class T10_TestReadWriteLock {
 
     }
 }
+
+/**
+ * 读写锁,
+ * @date 15:54 2020/6/29
+ * @param null
+ * @return
+ */
+class MyT10_TestReadWriteLock {
+    private Lock lock = new ReentrantLock(false);
+
+    static ReadWriteLock readWriteLock = new ReentrantReadWriteLock();
+    static ReentrantReadWriteLock.ReadLock readLock = readWriteLock.readLock();
+}

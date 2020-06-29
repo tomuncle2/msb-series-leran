@@ -1,35 +1,40 @@
 /**
- * reentrantlock�������synchronized
- * ����m1����this,ֻ��m1ִ����ϵ�ʱ��,m2����ִ��
- * �����Ǹ�ϰsynchronized��ԭʼ������
+ * reentrantlock用于替代synchronized
+ * 由于m1锁定this,只有m1执行完毕的时候,m2才能执行
+ * 这里是复习synchronized最原始的语义
  *
- * ʹ��reentrantlock�������ͬ���Ĺ���
- * ��Ҫע����ǣ�����Ҫ����Ҫ����Ҫ�ֶ��ͷ�������Ҫ������˵���飩
- * ʹ��syn�����Ļ���������쳣��jvm���Զ��ͷ���������lock�����ֶ��ͷ�������˾�����finally�н��������ͷ�
+ * 使用reentrantlock可以完成同样的功能
+ * 需要注意的是，必须要必须要必须要手动释放锁（重要的事情说三遍）
+ * 使用syn锁定的话如果遇到异常，jvm会自动释放锁，但是lock必须手动释放锁，因此经常在finally中进行锁的释放
  *
- * ʹ��reentrantlock���Խ��С�����������tryLock�������޷�������������ָ��ʱ�����޷��������߳̿��Ծ����Ƿ�����ȴ�
+ * 使用reentrantlock可以进行“尝试锁定”tryLock，这样无法锁定，或者在指定时间内无法锁定，线程可以决定是否继续等待
  *
- * ʹ��ReentrantLock�����Ե���lockInterruptibly���������Զ��߳�interrupt����������Ӧ��
- * ��һ���̵߳ȴ����Ĺ����У����Ա����
+ * 使用ReentrantLock还可以调用lockInterruptibly方法，可以对线程interrupt方法做出响应，
+ * 在一个线程等待锁的过程中，可以被打断
  *
- * ReentrantLock������ָ��Ϊ��ƽ��
+ * ReentrantLock还可以指定为公平锁
  *
  * @author mashibing
  */
 package com.caidi.juc.c_020;
 
-import java.util.concurrent.TimeUnit;
+
 import java.util.concurrent.locks.ReentrantLock;
 
 public class T05_ReentrantLock5 extends Thread {
 
-	private static ReentrantLock lock=new ReentrantLock(false); //����Ϊtrue��ʾΪ��ƽ������Ա�������
+    /***
+     * 非公平锁 公平锁
+     * @date 13:48 2020/6/29
+     * @param null
+     * @return
+     */
+	private static ReentrantLock lock = new ReentrantLock(true); //����Ϊtrue��ʾΪ��ƽ������Ա�������
     public void run() {
         for(int i=0; i<100; i++) {
             lock.lock();
             try{
-//                TimeUnit.MILLISECONDS.sleep(100);
-                System.out.println(Thread.currentThread().getName()+"�����");
+                System.out.println(Thread.currentThread().getName() + " " + i);
             }catch (Exception e) {
                 e.printStackTrace();
             }
@@ -45,4 +50,9 @@ public class T05_ReentrantLock5 extends Thread {
         th1.start();
         th2.start();
     }
+
+}
+
+class MyT05_ReentrantLock5 {
+    private static ReentrantLock lock=new ReentrantLock(false);
 }
