@@ -73,7 +73,7 @@ class MyT04_ReentrantLock4 {
 		Lock lock = new ReentrantLock();
 		Thread t1 = new Thread(()->{
 			try {
-				lock.lock();
+				lock.lockInterruptibly();
 				System.out.println("t1 start");
 				TimeUnit.SECONDS.sleep(Integer.MAX_VALUE);
 				System.out.println("t1 end");
@@ -86,21 +86,29 @@ class MyT04_ReentrantLock4 {
 		t1.start();
 		//
 
+		Lock lock2 = new ReentrantLock();
 		Thread t2 = new Thread(()->{
 			try {
-				lock.lockInterruptibly();
+				lock2.lock();
 				System.out.println("t2 start");
 				TimeUnit.SECONDS.sleep(1);
 				System.out.println("t2 end");
 			} catch (InterruptedException e) {
 				System.out.println("interrupted!");
 			} finally {
-				lock.unlock();
+				lock2.unlock();
 			}
 		});
 		t2.start();
 
-		// mian线程打断t2 的等待，
+		// mian线程打断t1 t2的等待， t1流程可被打断,同时释放锁   t2执行流程不会被打断，lock()获得锁，直到unlock()才会释放锁
+		try {
+			TimeUnit.SECONDS.sleep(2);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		t1.interrupt();
+
 		t2.interrupt();
 	}
 }
