@@ -16,6 +16,7 @@
 package com.caidi.juc.c_020_01_Interview;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -78,7 +79,78 @@ public class T03_NotifyHoldingLock { //wait notify
 				}
 			}
 		}, "t1").start();
-		
-		
+
 	}
+}
+
+/**
+ * 加上synchronized，
+ * 解决线程可见性问题。
+ * 这里t2在t1加到size = 5 之前一直等着，size = 5 ,t1通知t2，醒来
+ * 问题: t2醒来后，仍然获取不到锁，因为t1并没有释放锁。
+ * */
+class MyT03_NotifyHoldingLock {
+
+	// 添加volatile，使t2能够得到通知
+	private volatile List<Object> lists =new ArrayList<>();
+
+	public void add(Object o) {
+		lists.add(o);
+	}
+
+	public int size() {
+		return lists.size();
+	}
+
+	public static void main(String[] args) {
+
+		MyT03_NotifyHoldingLock myT03_notifyHoldingLock = new MyT03_NotifyHoldingLock();
+
+		Object o = new Object();
+
+		// 没有检测到list size到5的时候就一直运行着
+		new Thread(() -> {
+			synchronized (o) {
+				//
+				if (myT03_notifyHoldingLock.size() != 5) {
+					try {
+						System.out.println(Thread.currentThread().getName() + " t2 wait");
+						o.wait(10000000);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+
+		}, "t2").start();
+
+		try {
+			TimeUnit.SECONDS.sleep(1);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
+		// 往list add size到5的时候就一直运行着
+		new Thread(() -> {
+			synchronized (o) {
+				for (int i = 0; i < 10; i++) {
+					System.out.println(Thread.currentThread().getName() + " add:" + i);
+					myT03_notifyHoldingLock.add(new Object());
+					if (5 == myT03_notifyHoldingLock.size()) {
+						System.out.println(Thread.currentThread().getName() + " 唤醒t2 但是不释放锁");
+						o.notify();
+
+						try {
+							System.out.println(Thread.currentThread().getName() + " 等待 释放锁");
+							o.wait();
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+					}
+				}
+			}
+		}, "t1").start();
+
+	}
+
 }

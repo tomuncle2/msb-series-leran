@@ -93,3 +93,71 @@ public class T04_NotifyFreeLock {
 		
 	}
 }
+
+/**
+ * 加上synchronized，
+ * 解决线程可见性问题。
+ * 这里t2在t1加到size = 5 之前一直等着，size = 5 ,t1通知t2
+ * 解决t1通知t2后，还不释放锁的问题。
+ * */
+class MyT04_NotifyFreeLock{
+
+	// 添加volatile，使t2能够得到通知
+	private volatile List<Object> lists = new ArrayList<>();
+
+	public void add(Object o) {
+		lists.add(o);
+	}
+
+	public int getSize() {
+		return lists.size();
+	}
+
+	public static void main(String[] args) {
+		//
+		MyT04_NotifyFreeLock myT04_notifyFreeLock = new MyT04_NotifyFreeLock();
+		Object o = new Object();
+		new Thread(()->{
+			synchronized (o) {
+				if (5 != myT04_notifyFreeLock.getSize()) {
+					try {
+						System.out.println(Thread.currentThread().getName() + " wait.... 释放锁");
+						// wait释放锁
+						o.wait();
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+
+				System.out.println(Thread.currentThread().getName() + " 唤醒t1");
+				o.notify();
+
+			}
+			System.out.println(Thread.currentThread().getName() + " t2 end");
+
+		},"t2").start();
+
+
+		new Thread(()->{
+			synchronized (o) {
+				for (int i=0; i<10; i++) {
+					System.out.println(Thread.currentThread().getName() + " add " + i);
+					myT04_notifyFreeLock.add(new Object());
+					if (myT04_notifyFreeLock.getSize() == 5) {
+						System.out.println(Thread.currentThread().getName() + " 唤醒 t2");
+						o.notify();
+						System.out.println(Thread.currentThread().getName() + "  wait.... 释放锁");
+						try {
+							o.wait();
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+					}
+				}
+			}
+		},"t1").start();
+	}
+
+
+
+}

@@ -55,7 +55,7 @@ public class T05_CountDownLatch {
 					latch.await();
 					
 					//也可以指定等待时间
-					//latch.await(5000, TimeUnit.MILLISECONDS);
+					latch.await(5000, TimeUnit.MILLISECONDS);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}

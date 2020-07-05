@@ -35,7 +35,7 @@ public class T12_TestExchanger {
 }
 
 /**
- * 两个线程交换便变量，两个游戏账号交换装备
+ * 两个线程交换便变量，两个游戏账号交换装备  一个线程等着另一个线程
  */
 class MyT12_TestExchanger{
 
