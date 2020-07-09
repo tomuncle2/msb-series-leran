@@ -84,3 +84,89 @@ public class MyContainer2<T> {
 		}
 	}
 }
+
+/**
+ * 用cas实现生产者-消费者模型
+ */
+class MyMyContainer2<T>{
+	final private LinkedList<T> lists = new LinkedList<>();
+	final private int MAX = 10; //最多10个元素
+	private int count = 0;
+
+	private Lock lock = new ReentrantLock();
+	private Condition customer = lock.newCondition();
+	private Condition product = lock.newCondition();
+
+	public void put(T t) {
+		// 手动加锁，异常不会打断ReentrantLock锁
+		try {
+			lock.lock();
+			while (getCount() == MAX) {
+				// 等待，并且让出锁
+				try {
+					customer.await();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+			lists.add(t);
+			count++;
+			product.signalAll();
+		} finally {
+			lock.unlock();
+		}
+	}
+
+	public T get() {
+		try {
+			lock.lock();
+			while (getCount() == 0) {
+				// 等待，并且让出锁
+				try {
+					product.await();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+			T t = lists.removeFirst();
+			count--;
+			customer.signalAll();
+			return t;
+		} finally {
+			lock.unlock();
+		}
+	}
+
+	public int getCount() {
+		try {
+			lock.lock();
+			return count;
+		} finally {
+			lock.unlock();
+		}
+	}
+
+	public static void main(String[] args) {
+		MyMyContainer2<String> myMyContainer2 = new MyMyContainer2();
+		// 生产者线程
+		for (int i = 1;i < 2;i++) {
+			new Thread(()->{
+				// 每人生产10个馒头
+				for (int j = 1;j < 10;j++) {
+					myMyContainer2.put(j + "");
+					System.out.println( Thread.currentThread().getName() + " put " + j);
+				}
+			},"p" + i).start();
+		}
+
+		// 消费者线程
+		for (int i = 1;i < 10;i++) {
+			new Thread(()->{
+				// 每人吃2个馒头
+				for (int j = 1;j < 2;j++) {
+					System.out.println( Thread.currentThread().getName() + " get " + myMyContainer2.get());
+				}
+			},"c" + i).start();
+		}
+	}
+}
