@@ -94,6 +94,7 @@ class MyMyContainer2<T>{
 	private int count = 0;
 
 	private Lock lock = new ReentrantLock();
+	// 等待队列
 	private Condition customer = lock.newCondition();
 	private Condition product = lock.newCondition();
 
@@ -101,17 +102,18 @@ class MyMyContainer2<T>{
 		// 手动加锁，异常不会打断ReentrantLock锁
 		try {
 			lock.lock();
+			// while循环 当当前线程重新获得锁的时候 需要再判断一次容器的元素个数
 			while (getCount() == MAX) {
-				// 等待，并且让出锁
+				// 等待，并且让出锁（进入aqs等待队列）
 				try {
-					customer.await();
+					product.await();
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
 			}
 			lists.add(t);
 			count++;
-			product.signalAll();
+			customer.signalAll();
 		} finally {
 			lock.unlock();
 		}
@@ -123,14 +125,14 @@ class MyMyContainer2<T>{
 			while (getCount() == 0) {
 				// 等待，并且让出锁
 				try {
-					product.await();
+					customer.await();
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
 			}
 			T t = lists.removeFirst();
 			count--;
-			customer.signalAll();
+			product.signalAll();
 			return t;
 		} finally {
 			lock.unlock();
@@ -149,10 +151,10 @@ class MyMyContainer2<T>{
 	public static void main(String[] args) {
 		MyMyContainer2<String> myMyContainer2 = new MyMyContainer2();
 		// 生产者线程
-		for (int i = 1;i < 2;i++) {
+		for (int i = 0;i < 2;i++) {
 			new Thread(()->{
 				// 每人生产10个馒头
-				for (int j = 1;j < 10;j++) {
+				for (int j = 0;j < 10;j++) {
 					myMyContainer2.put(j + "");
 					System.out.println( Thread.currentThread().getName() + " put " + j);
 				}
@@ -160,10 +162,10 @@ class MyMyContainer2<T>{
 		}
 
 		// 消费者线程
-		for (int i = 1;i < 10;i++) {
+		for (int i = 0;i < 10;i++) {
 			new Thread(()->{
 				// 每人吃2个馒头
-				for (int j = 1;j < 2;j++) {
+				for (int j = 0;j < 2;j++) {
 					System.out.println( Thread.currentThread().getName() + " get " + myMyContainer2.get());
 				}
 			},"c" + i).start();
