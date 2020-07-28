@@ -85,8 +85,8 @@ class MyT10_TestReadWriteLock {
     }
 
     public static void read(Lock lock){
-        // 来自readWriteLock下的读锁  readWriteLock监视     readLock锁的读线程间互不加锁
-        // 读线程去获取读锁，不会被阻塞（相当于不加锁）  写线程去获取写锁，会被阻塞
+        //  readWriteLock对象监视 其下的  readLock writeLock   ，要上writelock的时候得等所有readlock退出他才能上
+        // 线程去获取读锁，不会被阻塞（相当于不加锁）  线程去获取写锁，会被阻塞
         try {
             lock.lock();
             System.out.println(Thread.currentThread().getName() + " read value:" + value);
@@ -119,7 +119,7 @@ class MyT10_TestReadWriteLock {
 //            read(lock);
 //        };
 
-        // 加入读写锁提高效率 读操作间可以互相访问
+        // 加入读写锁提高效率 必须先所有readlock退出，writelock才能上
         Runnable runnableWrite = ()->{
             int raddom = random.nextInt(100);
             write(writeLock, raddom);
