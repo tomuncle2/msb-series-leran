@@ -1,6 +1,5 @@
 package com.caidi.juc.c_024_FromHashtableToCHM;
 
-import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.UUID;
 
@@ -135,7 +134,7 @@ class Test_T01_TestHashtable {
     /**读取和写入*/
     public static void main(String[] args) {
         long startTime = System.currentTimeMillis();
-        MyThread[] threads = new MyThread[Constants.COUNT/Constants.THREAD_COUNT];
+        MyThread[] threads = new MyThread[Constants.THREAD_COUNT];
         // 写入
         for (int i = 0;i<threads.length;i++) {
             threads[i] = new MyThread(i * Constants.COUNT/Constants.THREAD_COUNT);
@@ -159,7 +158,7 @@ class Test_T01_TestHashtable {
 
         // 读取
         for (int i = 0;i<10;i++) {
-            //b
+            // b
         }
     }
 
