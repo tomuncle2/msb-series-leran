@@ -1,4 +1,4 @@
-package com.caidi.juc.c_024_FromHashtableToCHM;
+package com.caidi.juc.c_023_02_FromHashtableToCHM;
 
 import java.util.Collections;
 import java.util.HashMap;

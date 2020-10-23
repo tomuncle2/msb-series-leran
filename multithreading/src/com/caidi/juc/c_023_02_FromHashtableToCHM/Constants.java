@@ -1,4 +1,4 @@
-package com.caidi.juc.c_024_FromHashtableToCHM;
+package com.caidi.juc.c_023_02_FromHashtableToCHM;
 
 public class Constants {
     public static final int COUNT = 1000000;
