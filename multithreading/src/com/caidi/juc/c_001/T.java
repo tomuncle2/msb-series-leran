@@ -1,5 +1,7 @@
 package com.caidi.juc.c_001;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * @author: 蔡迪
  * @date: 20:59 2020/5/18
@@ -31,4 +33,47 @@ public class T {
 
     }
 
+
+    class CC {
+        int count = 100;
+        public synchronized void add() {
+            count ++;
+            System.out.println("eat food");
+        }
+
+        public synchronized void sum() {
+            count --;
+            System.out.println("eat food");
+        }
+    }
+
+    static class AA extends Thread {
+        @Override
+        public void run() {
+            for (int i = 0; i < 10; i++) {
+                System.out.println("aa"  + i + Thread.currentThread().getName());
+                try {
+                    TimeUnit.SECONDS.sleep(1);
+                    //Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    static class BB extends Thread {
+        @Override
+        public void run() {
+            for (int i = 0; i < 10; i++) {
+                System.out.println("bb"  + i + Thread.currentThread().getName());
+                try {
+                    TimeUnit.SECONDS.sleep(1);
+                    //Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
 }

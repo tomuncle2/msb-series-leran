@@ -5,7 +5,7 @@ package com.caidi.juc.c_000;
  * @date: 20:42 2020/5/18
  * @description: sleep/yeild   让出线程资源进行
  */
-public class T02_Sleep_Yeild_Join {
+public  class T02_Sleep_Yeild_Join {
 
     // s
     static void testWait() {
@@ -96,7 +96,72 @@ public class T02_Sleep_Yeild_Join {
         //testSleep();
         //testYeild();
         // 执行顺序 main t1  t2
-        testJoin();
+        //testJoin();
+        TTT ttt = new TTT();
+        Thread thread = new Thread(ttt);
+        thread.start();
+
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        CCC ccc = new CCC();
+        Thread thread1 = new Thread(ccc);
+        thread1.start();
+
+        try {
+            ccc.notify();
+            thread1.join();
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        Thread.yield();
+
+
+        System.out.println("finsh");
     }
+
+
+    static class TTT implements Runnable {
+
+        @Override
+        public void run() {
+            for (int i = 0; i < 10; i++) {
+                System.out.println("线程TTT");
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    static class CCC implements Runnable {
+
+        @Override
+        public void run() {
+            for (int i = 0; i < 10; i++) {
+                if (i == 3) {
+                    try {
+                        this.wait();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                System.out.println("线程CCC");
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
 
 }
