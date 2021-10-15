@@ -29,6 +29,5 @@ public class T {
 			t.m1();
 		}).start();
 
-
 	}
 }
